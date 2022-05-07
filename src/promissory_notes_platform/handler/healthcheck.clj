@@ -2,6 +2,5 @@
   (:require [ataraxy.response :as response]
             [integrant.core :as ig]))
 
-(defmethod ig/init-key ::execute [_ {:keys [id]}]
-  (println id)
-  (fn [_] [::response/ok id]))
+(defmethod ig/init-key ::execute [_ {}]
+  (fn [_] [::response/ok "OK"]))
