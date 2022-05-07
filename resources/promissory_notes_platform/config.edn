@@ -1,8 +1,12 @@
 {:duct.profile/base
  {:duct.core/project-ns promissory-notes-platform
 
-  :promissory-notes-platform.domain.type.id/basic-id {}
-  :promissory-notes-platform.handler.healthcheck/execute {:id #ig/ref :promissory-notes-platform.domain.type.id/basic-id}}
+  :promissory-notes-platform.usecase.settlement/settlement-usecase {}
+
+  ; presentation
+  :promissory-notes-platform.handler.settlement-controller/execute
+  {:settlement-usecase #ig/ref :promissory-notes-platform.usecase.settlement/settlement-usecase}
+  :promissory-notes-platform.handler.healthcheck/execute {}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"
@@ -12,4 +16,6 @@
  :duct.module/logging {}
  :duct.module/ataraxy
  {"/healthcheck"
-  {:get [:healthcheck/execute]}}}
+  {:get [:healthcheck/execute]}
+  "/promissorynotes"
+  {[:post {body :body-params}] [:settlement-controller/execute body]}}}
