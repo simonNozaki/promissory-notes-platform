@@ -9,4 +9,9 @@
     (is
       (s/valid? ::bank (->Bank "三井住友銀行" "神戸営業部" (->Account "渋沢栄一" :normal "100000" 1000000)))
       true))
-  (testing "取り立てができる"))
+  (testing "取り立てができる"
+    (let [payee (->Bank "三井住友銀行" "神戸営業部" (->Account "渋沢栄一" :normal "100000" 1000000))
+          payed (bill (payee) 500000)]
+      (is
+        (:balance (:account payed))
+        1500000))))
