@@ -8,7 +8,9 @@
                    :value-object/branch
                    :promissory-notes-platform.domain.account.model/account]))
 
-(defprotocol Collectable
+; 金融機関基底プロトコル
+(defprotocol Balanceable
+  (draw [this amount])
   (bill [this amount]))
 
 (s/fdef bill
@@ -16,8 +18,23 @@
                      :amount :promissory-notes-platform.domain.value-object/amount)
         :ret ::bank)
 
+(s/fdef draw
+        :args (s/cat :this ::bank
+                     :amount :promissory-notes-platform.domain.value-object/amount)
+        :ret ::bank)
+
 (defrecord Bank [name branch account]
-  Collectable
+  Balanceable
+  (draw [this amount]
+    (let [name (:name this)
+          branch (:branch this)
+          account (:account this)
+          current-balance (:balance account)
+          net-amount (- current-balance amount)]
+      ; 残高はマイナスにならない
+      (if (< net-amount 0)
+        nil
+        (->Bank name branch (assoc account :balance net-amount)))))
   (bill [this amount]
     (let [name (:name this)
           branch (:branch this)
