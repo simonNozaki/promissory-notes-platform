@@ -1,4 +1,4 @@
-(ns promissory-notes-platform.handler.healthcheck
+(ns promissory-notes-platform.handler.healthcheck-controller
   (:require [ataraxy.response :as response]
             [integrant.core :as ig]))
 
