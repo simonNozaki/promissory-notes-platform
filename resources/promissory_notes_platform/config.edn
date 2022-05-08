@@ -1,12 +1,17 @@
 {:duct.profile/base
  {:duct.core/project-ns promissory-notes-platform
 
-  :promissory-notes-platform.usecase.settlement/settlement-usecase {}
+  ;repository
+  :promissory-notes-platform.infrastructure.repository.bank-repository/inmemory-bank-repository {}
+
+  ; usecase
+  :promissory-notes-platform.usecase.settlement-usecase/settlement-usecase
+  {:bank-repository #ig/ref :promissory-notes-platform.infrastructure.repository.bank-repository/inmemory-bank-repository}
 
   ; presentation
   :promissory-notes-platform.handler.settlement-controller/execute
-  {:settlement-usecase #ig/ref :promissory-notes-platform.usecase.settlement/settlement-usecase}
-  :promissory-notes-platform.handler.healthcheck/execute {}}
+  {:settlement-usecase #ig/ref :promissory-notes-platform.usecase.settlement-usecase/settlement-usecase}
+  :promissory-notes-platform.handler.healthcheck-controller/execute {}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"
@@ -16,6 +21,6 @@
  :duct.module/logging {}
  :duct.module/ataraxy
  {"/healthcheck"
-  {:get [:healthcheck/execute]}
+  {:get [:healthcheck-controller/execute]}
   "/promissorynotes"
   {[:post {body :body-params}] [:settlement-controller/execute body]}}}
