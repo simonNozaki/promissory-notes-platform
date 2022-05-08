@@ -40,7 +40,8 @@
                                  (:type (:payee request))
                                  (:number (:payee request))
                                  (:holder (:drawee request)))
-          drawn-drawee (draw drawee amount)]
+          drawn-drawee (draw drawee amount)
+          payed-payee (bill payee amount)]
       (timbre/info "決済金額: " amount)
       (timbre/info "振出人" drawee)
       (timbre/info "受取人" payee)
@@ -49,9 +50,9 @@
               (nil? drawn-drawee)
               (not (can-settle? promissory-notes (LocalDate/now))))
         nil)
-      (bill payee amount)
       (timbre/info "振出人残高: " (:balance (:account drawn-drawee)))
-      (timbre/info "ユースケースの終了"))))
+      (timbre/info "ユースケースの終了")
+      {:payee payed-payee :drawee drawn-drawee})))
 
 
 (defmethod ig/init-key ::settlement-usecase [_ {:keys [bank-repository]}]
