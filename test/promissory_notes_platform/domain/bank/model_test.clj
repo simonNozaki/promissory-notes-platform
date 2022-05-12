@@ -2,7 +2,9 @@
   (:require [clojure.test :refer :all]
             [clojure.spec.alpha :as s])
   (:use [promissory-notes-platform.domain.account.model]
-        [promissory-notes-platform.domain.bank.model]))
+        [promissory-notes-platform.domain.bank.model]
+        [promissory-notes-platform.domain.account.value-object]
+        [promissory-notes-platform.domain.bank.value-object]))
 
 (deftest bank-test
   (testing "仕様を満たす"
@@ -12,20 +14,18 @@
                 (->Bank "三井住友銀行" "神戸営業部" (->Account "渋沢栄一" :normal "100000" 1000000)))
         true)))
   (testing "仕様を満たさない: 口座種別が不正"
-    (let [bank (->Bank "三井住友銀行" "神戸営業部" (->Account "渋沢栄一" :time-deposit "100000" 1000000))]
-      (is
-        (=
-          (s/valid? :promissory-notes-platform.domain.bank.model/bank
-                  bank)
-          false))))
-  ; TODO なぜかfalseで失敗...
-  (testing "仕様を満たさない: 口座番号が6桁ではない"
-    (let [bank (->Bank "三井住友銀行" "神戸営業部" (->Account "渋沢栄一" :normal "0000" 1000000))]
-      (println bank)
-      (s/explain-data :promissory-notes-platform.domain.bank.model/bank bank)
+    (let [account (->Account "渋沢栄一" :time-deposit "100000" 1000000)
+          bank (->Bank "三井住友銀行" "神戸営業部" account)]
       (is
         (=
           (s/valid? :promissory-notes-platform.domain.bank.model/bank bank)
+          false))))
+  (testing "仕様を満たさない: 口座番号が6桁ではない"
+    (let [not-6digits-bank (->Bank "三井住友銀行" "神戸営業部" (->Account "渋沢栄一" :normal "0000" 1000000))]
+      (println not-6digits-bank)
+      (is
+        (=
+          (s/valid? :promissory-notes-platform.domain.bank.model/bank not-6digits-bank)
           false))))
   (testing "取り立てができる"
     (let [payee (->Bank "三井住友銀行" "神戸営業部" (->Account "渋沢栄一" :normal "100000" 1000000))
