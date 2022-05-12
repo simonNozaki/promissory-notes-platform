@@ -40,10 +40,10 @@
 (defn create-promissory-notes [maturity-at presentation-at account]
   (let [maturity-at-local-date (LocalDate/parse
                                  maturity-at
-                                 (date-time-formatter date-format-yyyy-mm-dd))
+                                 (format-local-date date-format-yyyy-mm-dd))
         presentation-at-local-date (LocalDate/parse
-                                    presentation-at
-                                    (date-time-formatter date-format-yyyy-mm-dd))]
+                                     presentation-at
+                                     (format-local-date date-format-yyyy-mm-dd))]
     (->PromissoryNotes
       maturity-at-local-date
       presentation-at-local-date

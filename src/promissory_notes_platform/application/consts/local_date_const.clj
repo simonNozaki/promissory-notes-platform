@@ -5,5 +5,5 @@
 (def date-format-yyyy-mm-dd "yyyy-MM-dd")
 
 ; 日付フォーマッタ
-(defn date-time-formatter [format]
+(defn format-local-date [format]
   (DateTimeFormatter/ofPattern format))

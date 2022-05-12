@@ -1,6 +1,6 @@
 (ns promissory-notes-platform.domain.promissorynotes.model-test
   (:require [clojure.test :refer :all]
-            [promissory-notes-platform.application.consts.local-date-const :refer [date-time-formatter date-format-yyyy-mm-dd]])
+            [promissory-notes-platform.application.consts.local-date-const :refer [format-local-date date-format-yyyy-mm-dd]])
   (:use [promissory-notes-platform.domain.promissorynotes.model]
         [promissory-notes-platform.domain.account.model])
   (:import (java.time LocalDate)))
@@ -8,7 +8,7 @@
 (defn get-local-date [local-date-string]
   (LocalDate/parse
     local-date-string
-    (date-time-formatter date-format-yyyy-mm-dd)))
+    (format-local-date date-format-yyyy-mm-dd)))
 
 (deftest promissory-notes-test
   (testing "仕様を満たすこと: ファクトリメソッド"
