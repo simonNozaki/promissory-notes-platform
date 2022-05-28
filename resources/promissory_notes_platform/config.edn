@@ -1,8 +1,12 @@
 {:duct.profile/base
  {:duct.core/project-ns promissory-notes-platform
 
+  ; dao
+  :promissory-notes-platform.infrastructure.dao.bank-dao/inmemory-bank-dao {}
+
   ;repository
-  :promissory-notes-platform.infrastructure.repository.bank-repository/inmemory-bank-repository {}
+  :promissory-notes-platform.infrastructure.repository.bank-repository/inmemory-bank-repository
+  {:bank-dao #ig/ref :promissory-notes-platform.infrastructure.dao.bank-dao/inmemory-bank-dao}
 
   ; usecase
   :promissory-notes-platform.usecase.settlement-usecase/settlement-usecase
