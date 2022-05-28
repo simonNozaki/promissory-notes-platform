@@ -10,13 +10,18 @@
       (s/valid? :promissory-notes-platform.domain.bank.model/bank
                 (->Bank "三井住友銀行" "神戸営業部" (->Account "渋沢栄一" :normal "100000" 1000000)))
       true))
+  (testing "仕様を満たさない: 銀行名が空"
+    (let [bank (->Bank "" "神戸営業部" (->Account "渋沢栄一" :time-deposit "100000" 1000000))]
+      (is
+        (s/valid? :promissory-notes-platform.domain.bank.model/bank
+                  bank)
+        false)))
   (testing "仕様を満たさない: 口座種別が不正"
     (let [bank (->Bank "三井住友銀行" "神戸営業部" (->Account "渋沢栄一" :time-deposit "100000" 1000000))]
       (is
         (s/valid? :promissory-notes-platform.domain.bank.model/bank
                   bank)
         false)))
-  ; TODO なぜかfalseで失敗...
   (testing "仕様を満たさない: 口座番号が6桁ではない"
     (let [bank (->Bank "三井住友銀行" "神戸営業部" (->Account "渋沢栄一" :normal "00001" 1000000))]
       (is
